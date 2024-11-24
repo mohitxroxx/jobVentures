@@ -1,5 +1,5 @@
-import { Response } from "express"
 import { Requests } from "../utils/def"
+import { Response } from "express"
 import axios, { all } from 'axios'
 import userSchema from '../models/userSchema'
 import empSchema from "../models/empSchema"
@@ -16,9 +16,6 @@ interface IExperience {
     company:string,
     jobTitle:string
 }
-
-
-
 
 const genTokens = async (userId: string) => {
     try {

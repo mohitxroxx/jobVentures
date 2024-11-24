@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import { Requests } from './utils/def'
 import { Server } from "socket.io"
 import connectDB from './config/db'
+import authentication from './middlewares/authentication'
 import 'dotenv/config'
 import cors from 'cors'
 // import session from 'express-session'
@@ -38,9 +39,9 @@ app.use(cookieParser())
 //     saveUninitialized: true,
 // }))
 
-app.use('/user', userRoutes)
-app.use('/emp', empRoutes)
 app.use('/api', apiRoutes)
+app.use('/user', authentication, userRoutes)
+app.use('/emp', authentication, empRoutes)
 
 app.get('/', (req: Requests, res: Response): Response => {
   return res.status(201).json({ msg: "Server is Live!!🚀" })
@@ -55,7 +56,7 @@ const server = app.listen(port, () => {
 const io = new Server(server, {
   cors: {
     credentials: true,
-    origin: ["https://hackathon-client-livid.vercel.app", "http://localhost:3000"]
+    origin: ["http://localhost:3000"]
   }
 });
 
@@ -64,9 +65,9 @@ const socketIdToEmailMap = new Map()
 
 io.on("connection", function connection(socket) {
   console.log("Socket Connected: ", socket.id)
-  socket.on('message',function message(data,isBinary){
-        socket.send("Acknoledged")
-      }
+  socket.on('message', function message(data, isBinary) {
+    socket.send("Acknoledged")
+  }
   )
   socket.on("room:join", (data) => {
     console.log(data)

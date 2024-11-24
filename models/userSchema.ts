@@ -105,7 +105,7 @@ const UserSchema = new Schema<IUser>({
     },
     role: {
         type: String,
-        default: "user"
+        default: "employee"
     },
     education: { 
         type: String,

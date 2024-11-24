@@ -24,6 +24,7 @@ interface IEmp {
     name: string,
     email: string,
     username: string,
+    role: string,
     mobile:string,
     password: string,
     company: string,
@@ -114,6 +115,10 @@ const EmpSchema = new Schema<IEmp>({
         required: true,
         unique: true,
         trim: true
+    },
+    role: {
+        type: String,
+        default: "employer"
     },
     mobile: {
         type: String,
