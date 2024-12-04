@@ -1,0 +1,38 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_KEY }}
+
+      # - name: Deploy Frontend
+      #   run: |
+      #     ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+      #       cd ${{ secrets.FRONTEND_PATH }}
+      #       git pull origin main
+      #       # npm install
+      #       # npm run build
+      #       pm2 restart react-build
+      #     EOF
+
+      - name: Deploy Backend
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd ${{ secrets.BACKEND_PATH }}
+            git pull origin main
+            npm install
+            pm2 restart index
+          EOF
